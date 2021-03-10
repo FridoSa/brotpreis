@@ -11,7 +11,7 @@ dispatch = [ ('c', calculate)
 
 main :: IO ()
 main = do
-    putStrLn "<C>alculate a price or <e>dit ingridients."
+    putStrLn "<C>alculate a price or <e>dit ingredients."
     char <- getChar
     getAction $ lookup char dispatch
 
