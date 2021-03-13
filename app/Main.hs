@@ -1,26 +1,25 @@
 module Main where
 
 import Lib
+import Edit
 
-dispatch :: [(Char, IO ())]
-dispatch = [ ('c', calculate)
-           , ('C', calculate)
-           , ('e', edit)
-           , ('E', edit)
+dispatch :: [(String, IO ())]
+dispatch = [ ("c", calculate)
+           , ("C", calculate)
+           , ("e", edit)
+           , ("E", edit)
            ]
 
 main :: IO ()
 main = do
     putStrLn "<C>alculate a price or <e>dit ingredients."
-    char <- getChar
+    char <- getLine
     getAction $ lookup char dispatch
 
 getAction :: Maybe (IO ()) -> IO ()
 getAction (Just action) = action
-getAction Nothing = putStrLn "Illegal character given."
+getAction Nothing = putStrLn "Illegal command."
 
 calculate :: IO ()
 calculate = putStrLn "calculate"
 
-edit :: IO ()
-edit = putStrLn "edit"

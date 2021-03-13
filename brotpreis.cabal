@@ -4,7 +4,7 @@ cabal-version: 1.12
 --
 -- see: https://github.com/sol/hpack
 --
--- hash: cf59b15d9a1f8cc23797062a195c1cd4c0e81f0b46682038dbbd6cd70b38b962
+-- hash: 651b31f4a9f4916026fbcb5a8fd848d060732bb6b3fd3963ef3995fae853bb42
 
 name:           brotpreis
 version:        0.1.0.0
@@ -27,6 +27,7 @@ source-repository head
 
 library
   exposed-modules:
+      Edit
       Lib
   other-modules:
       Paths_brotpreis
