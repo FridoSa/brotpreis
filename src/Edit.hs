@@ -10,6 +10,7 @@ dispatch :: [(String, [String] -> IO ())]
 dispatch = [ ("add", add)
             ,("rm", remove)
             ,("ed", editEntry)
+            ,("ret", (\_ -> return ()))
            ]
 
 handelFileNotExists :: IOError -> IO ()
@@ -25,10 +26,10 @@ edit :: IO ()
 edit = do
     showIngredients `catchIOError` handelFileNotExists
     putStrLn "Type add followed by a new entry to add an item. Attributes must be whitespace-seperated."
+    putStrLn "Type ret to return."
     command <- getLine
     case words command of (action : arguments) -> getAction (lookup action dispatch) arguments
                           [] -> putStrLn "No command given."
-    edit
     
 showIngredients :: IO ()
 showIngredients = do
@@ -37,10 +38,14 @@ showIngredients = do
     putStrLn "Type ed followed by a number and a changed entry to edit an item. Attributes must be whitespace-seperated."
 
 add :: [String] -> IO ()
-add i = appendFile "ingredients.txt" (unwords i ++ "\n")
+add i = do
+    appendFile "ingredients.txt" (unwords i ++ "\n")
+    edit
 
 remove :: [String] -> IO ()
-remove a = return ()
+remove a = do
+    edit
 
 editEntry :: [String] -> IO ()
-editEntry a = return ()
+editEntry a = do
+    edit

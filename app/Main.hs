@@ -1,7 +1,7 @@
 module Main where
 
-import Lib
 import Edit
+import Control.Monad
 
 dispatch :: [(String, IO ())]
 dispatch = [ ("c", calculate)
@@ -11,7 +11,7 @@ dispatch = [ ("c", calculate)
            ]
 
 main :: IO ()
-main = do
+main = forever $ do
     putStrLn "<C>alculate a price or <e>dit ingredients."
     char <- getLine
     getAction $ lookup char dispatch
