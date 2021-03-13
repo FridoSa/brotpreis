@@ -4,7 +4,7 @@ cabal-version: 1.12
 --
 -- see: https://github.com/sol/hpack
 --
--- hash: 651b31f4a9f4916026fbcb5a8fd848d060732bb6b3fd3963ef3995fae853bb42
+-- hash: e3032fcaf10dbb4889dc386c7e3c9672825b87b3fa962fa5ae2eb5500d66e12a
 
 name:           brotpreis
 version:        0.1.0.0
@@ -35,6 +35,7 @@ library
       src
   build-depends:
       base >=4.7 && <5
+    , directory
   default-language: Haskell2010
 
 executable brotpreis-exe
@@ -47,6 +48,7 @@ executable brotpreis-exe
   build-depends:
       base >=4.7 && <5
     , brotpreis
+    , directory
   default-language: Haskell2010
 
 test-suite brotpreis-test
@@ -60,4 +62,5 @@ test-suite brotpreis-test
   build-depends:
       base >=4.7 && <5
     , brotpreis
+    , directory
   default-language: Haskell2010
