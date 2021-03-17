@@ -7,6 +7,7 @@ import System.IO
 import System.IO.Error
 import System.Directory
 import Data.List
+import Text.Read
 
 dispatch :: [(String, [String] -> IO ())]
 dispatch = [ ("add", add)
@@ -56,20 +57,23 @@ remove [] = do
     putStrLn "No number given."
     edit
 remove (x:_) = do
-    let number = read x
+    let maybeNumber = readMaybe x
         fileName = "ingredients.txt"
-    handle <- openFile fileName ReadMode  
-    (tempName, tempHandle) <- openTempFile "." "temp"  
-    contents <- hGetContents handle  
-    let items = lines contents  
-        newItems = if number < length items
-                     then delete (items !! number) items
-                     else items
-    hPutStr tempHandle $ unlines newItems  
-    hClose handle  
-    hClose tempHandle  
-    removeFile fileName  
-    renameFile tempName fileName
+    case maybeNumber of (Just number) -> do
+                            handle <- openFile fileName ReadMode  
+                            (tempName, tempHandle) <- openTempFile "." "temp"  
+                            contents <- hGetContents handle  
+                            let items = lines contents  
+                                newItems = if number < length items
+                                            then delete (items !! number) items
+                                            else items
+                            hPutStr tempHandle $ unlines newItems  
+                            hClose handle  
+                            hClose tempHandle  
+                            removeFile fileName  
+                            renameFile tempName fileName
+                        Nothing -> do
+                            putStrLn "Bad input. Number needed."
     edit
 
 editEntry :: [String] -> IO ()
