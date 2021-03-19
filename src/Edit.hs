@@ -23,9 +23,7 @@ handleFileNotExists e
 
 getAction :: Maybe ([String] -> IO ()) -> [String] -> IO ()
 getAction (Just action) arguments = action arguments
-getAction Nothing _ = do 
-    putStrLn "Illegal command."
-    edit
+getAction Nothing _ = putStrLn "Illegal command."
 
 edit :: IO ()
 edit = do
@@ -34,9 +32,8 @@ edit = do
     putStrLn "Type ret to return."
     command <- getLine
     case words command of (action : arguments) -> getAction (lookup action dispatch) arguments
-                          [] -> do 
-                              putStrLn "No command given."
-                              edit
+                          [] -> putStrLn "No command given."
+    edit
     
 showIngredients :: IO ()
 showIngredients = do
@@ -47,22 +44,19 @@ showIngredients = do
 add :: [String] -> IO ()
 add [] = do
     putStrLn "No item given."
-    edit
 add i = do
     appendFile "ingredients.txt" (unwords i ++ "\n")
-    edit
 
 remove :: [String] -> IO ()
 remove [] = do
     putStrLn "No number given."
-    edit
 remove (x:_) = do
     let maybeNumber = readMaybe x
         fileName = "ingredients.txt"
     case maybeNumber of (Just number) -> do
                             handle <- openFile fileName ReadMode  
                             (tempName, tempHandle) <- openTempFile "." "temp"  
-                            contents <- hGetContents handle  
+                            contents <- hGetContents handle 
                             let items = lines contents  
                                 newItems = if number < length items
                                             then delete (items !! number) items
@@ -74,8 +68,12 @@ remove (x:_) = do
                             renameFile tempName fileName
                         Nothing -> do
                             putStrLn "Bad input. Number needed."
-    edit
 
 editEntry :: [String] -> IO ()
-editEntry a = do
-    edit
+editEntry [] = do
+    putStrLn "No arguments given."
+editEntry (x:[]) = do
+    putStrLn "To few arguments given."
+editEntry (n:i) = do
+    remove [n]
+    add i
