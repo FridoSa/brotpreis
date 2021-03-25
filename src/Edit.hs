@@ -16,11 +16,6 @@ dispatch = [ ("add", add)
             ,("ret", (\_ -> return ()))
            ]
 
-handleFileNotExists :: IOError -> IO ()
-handleFileNotExists e 
-    | isDoesNotExistError e = putStrLn "No ingredients saved."
-    | otherwise = ioError e
-
 getAction :: Maybe ([String] -> IO ()) -> [String] -> IO ()
 getAction (Just action) arguments = action arguments
 getAction Nothing _ = putStrLn "Illegal command."
@@ -33,7 +28,6 @@ edit = do
     command <- getLine
     case words command of (action : arguments) -> getAction (lookup action dispatch) arguments
                           [] -> putStrLn "No command given."
-    edit
     
 showIngredients :: IO ()
 showIngredients = do
@@ -44,12 +38,15 @@ showIngredients = do
 add :: [String] -> IO ()
 add [] = do
     putStrLn "No item given."
+    edit
 add i = do
     appendFile "ingredients.txt" (unwords i ++ "\n")
+    edit
 
 remove :: [String] -> IO ()
 remove [] = do
     putStrLn "No number given."
+    edit
 remove (x:_) = do
     let maybeNumber = readMaybe x
         fileName = "ingredients.txt"
@@ -68,12 +65,16 @@ remove (x:_) = do
                             renameFile tempName fileName
                         Nothing -> do
                             putStrLn "Bad input. Number needed."
+    edit
 
 editEntry :: [String] -> IO ()
 editEntry [] = do
     putStrLn "No arguments given."
+    edit
 editEntry (x:[]) = do
     putStrLn "To few arguments given."
+    edit
 editEntry (n:i) = do
     remove [n]
     add i
+    edit

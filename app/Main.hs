@@ -1,6 +1,7 @@
 module Main where
 
 import Edit
+import Calculate
 import Control.Monad
 
 dispatch :: [(String, IO ())]
@@ -20,6 +21,4 @@ getAction :: Maybe (IO ()) -> IO ()
 getAction (Just action) = action
 getAction Nothing = putStrLn "Illegal command."
 
-calculate :: IO ()
-calculate = putStrLn "calculate"
 

@@ -1,7 +1,13 @@
 module Lib
-    ( view
+    ( view, handleFileNotExists
     ) where
 
+import System.IO.Error
+
+handleFileNotExists :: IOError -> IO ()
+handleFileNotExists e 
+    | isDoesNotExistError e = putStrLn "No ingredients saved."
+    | otherwise = ioError e
 
 view :: IO ()
 view = do  
